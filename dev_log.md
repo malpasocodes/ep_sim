@@ -15,3 +15,4 @@
 - Phase 7: replaced placeholder `app.py` with the full Streamlit experience (sidebar controls + cached simulation pipeline + Plotly charts + data preview); smoke-tested locally.
 - Phase 8: installed `watchdog` to improve Streamlit reload performance, profiled evaluation path (6k–8k programs evaluated in ~10–11 ms), and confirmed we already meet the <1s responsiveness goal without further tuning.
 - Implemented the Additional Visualizations spec (state overview card, local-vs-state earnings histogram, enhanced narrative, and sample program trajectories) so users can interpret assumptions before diving into the scatter/bar charts.
+- Phase 9 kickoff: added `render.yaml` and `README_DEPLOY.md` with Render build/start commands, env vars, and testing checklist.
