@@ -1,18 +1,11 @@
-"""Phase 3: Synthetic state + commuting zone scaffolding.
-
-Reads the commuting-zone crosswalk and generates dataclass-backed objects with
-local high-school earnings derived from the statewide benchmark and inequality
-settings defined in ``simulation.config``.
-"""
+"""Phase 3: Synthetic state + commuting zone scaffolding."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from pathlib import Path
 from typing import Dict, Iterable, List, Sequence
 
 import numpy as np
-import pandas as pd
 
 from . import config
 
@@ -40,33 +33,6 @@ class State:
         self.commuting_zones.append(cz)
 
 
-class CrosswalkColumns:
-    STATE_CODE = "state_code"
-    STATE_NAME = "state_name"
-    CZ_ID = "cz_id"
-    CZ_NAME = "cz_name"
-    CZ_TYPE = "cz_type"
-
-
-REQUIRED_COLUMNS = (
-    CrosswalkColumns.STATE_CODE,
-    CrosswalkColumns.STATE_NAME,
-    CrosswalkColumns.CZ_ID,
-    CrosswalkColumns.CZ_NAME,
-    CrosswalkColumns.CZ_TYPE,
-)
-
-
-def load_crosswalk(path: Path | str) -> pd.DataFrame:
-    """Load and validate the commuting-zone crosswalk CSV."""
-
-    df = pd.read_csv(path, dtype=str).dropna()
-    missing = [col for col in REQUIRED_COLUMNS if col not in df.columns]
-    if missing:  # pragma: no cover - defensive guard for future edits
-        raise ValueError(f"Crosswalk file missing columns: {missing}")
-    return df
-
-
 def _pick_multiplier(rng: np.random.Generator, cz_type: str) -> float:
     low, high = config.CZ_LOCAL_EARNINGS_MULTIPLIERS[cz_type]
     return rng.uniform(low, high)
@@ -86,52 +52,42 @@ def _assign_local_earnings(
 
 
 def build_states(
-    crosswalk_path: Path | str,
     *,
     inequality_level: float,
     seed: int | None = None,
 ) -> Dict[str, State]:
     """Create a dictionary of states keyed by state code."""
 
-    df = load_crosswalk(crosswalk_path)
     rng = np.random.default_rng(seed)
     states: Dict[str, State] = {}
+    cz_types = list(config.CZ_TYPE_SHARES.keys())
+    cz_weights = list(config.CZ_TYPE_SHARES.values())
 
-    for row in df.itertuples(index=False):
-        code = getattr(row, CrosswalkColumns.STATE_CODE)
-        name = getattr(row, CrosswalkColumns.STATE_NAME)
-        cz_id = getattr(row, CrosswalkColumns.CZ_ID)
-        cz_name = getattr(row, CrosswalkColumns.CZ_NAME)
-        cz_type = getattr(row, CrosswalkColumns.CZ_TYPE).lower()
+    for code, state_hs in config.STATE_HS_EARNINGS.items():
+        state_name = config.STATE_NAMES.get(code, code)
+        cz_count = config.get_state_cz_count(code)
+        state = State(code=code, name=state_name, state_hs_earnings=state_hs)
 
-        if code not in config.STATE_HS_EARNINGS:
-            raise ValueError(f"State {code} missing from STATE_HS_EARNINGS config")
-        if cz_type not in config.CZ_LOCAL_EARNINGS_MULTIPLIERS:
-            raise ValueError(f"CZ type '{cz_type}' missing multiplier config")
-
-        state = states.setdefault(
-            code,
-            State(
-                code=code,
-                name=name,
-                state_hs_earnings=config.STATE_HS_EARNINGS[code],
-            ),
-        )
-
-        local_hs = _assign_local_earnings(
-            state.state_hs_earnings,
-            cz_type=cz_type,
-            inequality_level=inequality_level,
-            rng=rng,
-        )
-        state.add_cz(
-            CommutingZone(
-                cz_id=cz_id,
-                name=cz_name,
+        for idx in range(cz_count):
+            cz_type = rng.choice(cz_types, p=cz_weights)
+            cz_id = f"{code}-{idx+1:03d}"
+            cz_name = f"{state_name} CZ {idx+1}"
+            local_hs = _assign_local_earnings(
+                state_hs,
                 cz_type=cz_type,
-                local_hs_earnings=local_hs,
+                inequality_level=inequality_level,
+                rng=rng,
             )
-        )
+            state.add_cz(
+                CommutingZone(
+                    cz_id=cz_id,
+                    name=cz_name,
+                    cz_type=cz_type,
+                    local_hs_earnings=local_hs,
+                )
+            )
+
+        states[code] = state
 
     return states
 
@@ -148,5 +104,4 @@ __all__ = [
     "State",
     "build_states",
     "iter_commuting_zones",
-    "load_crosswalk",
 ]

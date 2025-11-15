@@ -2,19 +2,14 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
-import pandas as pd
 import streamlit as st
 
 from simulation import config, evaluation, geo, programs, visuals
 
-DATA_PATH = Path("data/commuting_zones.csv")
-
 
 @st.cache_data(show_spinner=False)
 def load_states(inequality_level: float, seed: int | None) -> dict[str, geo.State]:
-    return geo.build_states(DATA_PATH, inequality_level=inequality_level, seed=seed)
+    return geo.build_states(inequality_level=inequality_level, seed=seed)
 
 
 @st.cache_data(show_spinner=False)
@@ -96,6 +91,14 @@ def main() -> None:
 
     st.subheader("Summary Narrative")
     st.write(visuals.generate_narrative(summary))
+    if controls["state"] != "All":
+        state_code = controls["state"]
+        cz_count = config.get_state_cz_count(state_code)
+        state_label = config.STATE_NAMES.get(state_code, state_code)
+        st.caption(
+            f"This simulation uses {cz_count} synthetic commuting zones for {state_label} "
+            "based on the proportional mapping."
+        )
 
     with st.expander("Raw Data Preview"):
         st.dataframe(df.head(50))

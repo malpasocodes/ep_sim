@@ -7,6 +7,9 @@ generation, evaluation, UI) can pull from a single source of truth.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import csv
+import logging
+from pathlib import Path
 from typing import Dict, Tuple
 
 # ---------------------------------------------------------------------------
@@ -134,6 +137,85 @@ STATE_HS_EARNINGS: Dict[str, int] = {
     "WY": 36000,
 }
 
+STATE_NAMES: Dict[str, str] = {
+    "AL": "Alabama",
+    "AK": "Alaska",
+    "AZ": "Arizona",
+    "AR": "Arkansas",
+    "CA": "California",
+    "CO": "Colorado",
+    "CT": "Connecticut",
+    "DE": "Delaware",
+    "DC": "District of Columbia",
+    "FL": "Florida",
+    "GA": "Georgia",
+    "HI": "Hawaii",
+    "ID": "Idaho",
+    "IL": "Illinois",
+    "IN": "Indiana",
+    "IA": "Iowa",
+    "KS": "Kansas",
+    "KY": "Kentucky",
+    "LA": "Louisiana",
+    "ME": "Maine",
+    "MD": "Maryland",
+    "MA": "Massachusetts",
+    "MI": "Michigan",
+    "MN": "Minnesota",
+    "MS": "Mississippi",
+    "MO": "Missouri",
+    "MT": "Montana",
+    "NE": "Nebraska",
+    "NV": "Nevada",
+    "NH": "New Hampshire",
+    "NJ": "New Jersey",
+    "NM": "New Mexico",
+    "NY": "New York",
+    "NC": "North Carolina",
+    "ND": "North Dakota",
+    "OH": "Ohio",
+    "OK": "Oklahoma",
+    "OR": "Oregon",
+    "PA": "Pennsylvania",
+    "RI": "Rhode Island",
+    "SC": "South Carolina",
+    "SD": "South Dakota",
+    "TN": "Tennessee",
+    "TX": "Texas",
+    "UT": "Utah",
+    "VT": "Vermont",
+    "VA": "Virginia",
+    "WA": "Washington",
+    "WV": "West Virginia",
+    "WI": "Wisconsin",
+    "WY": "Wyoming",
+}
+
+_LOGGER = logging.getLogger(__name__)
+ROOT_DIR = Path(__file__).resolve().parent.parent
+DATA_DIR = ROOT_DIR / "data"
+STATE_CZ_MAPPING_PATH = DATA_DIR / "state_cz_mapping.csv"
+DEFAULT_CZ_COUNT = 8
+
+
+def _load_state_cz_mapping() -> Dict[str, int]:
+    mapping: Dict[str, int] = {}
+    if not STATE_CZ_MAPPING_PATH.exists():  # pragma: no cover - dev safeguard
+        _LOGGER.warning("state_cz_mapping.csv missing at %s", STATE_CZ_MAPPING_PATH)
+        return mapping
+    with STATE_CZ_MAPPING_PATH.open("r", encoding="utf-8") as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            try:
+                code = row["state"].strip().upper()
+                mapping[code] = int(row["cz_count"])
+            except (KeyError, ValueError):
+                continue
+    return mapping
+
+
+STATE_CZ_COUNTS = _load_state_cz_mapping()
+
 
 def get_state_hs_earnings(state_code: str) -> int:
     """Return the statewide HS earnings benchmark for the provided state."""
@@ -143,6 +225,17 @@ def get_state_hs_earnings(state_code: str) -> int:
         return STATE_HS_EARNINGS[code]
     except KeyError as exc:  # pragma: no cover - defensive branch
         raise ValueError(f"Unknown state code: {state_code}") from exc
+
+
+def get_state_cz_count(state_code: str) -> int:
+    """Return the synthetic commuting zone count for a state."""
+
+    code = state_code.upper()
+    count = STATE_CZ_COUNTS.get(code)
+    if count is None:
+        _LOGGER.warning("Missing CZ count for %s, defaulting to %s", code, DEFAULT_CZ_COUNT)
+        return DEFAULT_CZ_COUNT
+    return count
 
 
 # ---------------------------------------------------------------------------
@@ -193,6 +286,8 @@ SIM_DEFAULTS = SimulationDefaults(
 __all__ = [
     "CZ_LOCAL_EARNINGS_MULTIPLIERS",
     "CZ_TYPE_SHARES",
+    "DATA_DIR",
+    "DEFAULT_CZ_COUNT",
     "DEFAULT_PROGRAMS_PER_CZ",
     "DEFAULT_INEQUALITY_LEVEL",
     "PROGRAM_BUMP_RANGES",
@@ -200,8 +295,12 @@ __all__ = [
     "PROGRAM_TYPES",
     "SIM_DEFAULTS",
     "STATE_HS_EARNINGS",
+    "STATE_NAMES",
+    "STATE_CZ_COUNTS",
+    "STATE_CZ_MAPPING_PATH",
     "TIME_HORIZONS",
     "TimeHorizon",
     "get_state_hs_earnings",
+    "get_state_cz_count",
     "inequality_std",
 ]

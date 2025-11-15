@@ -14,8 +14,8 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - Exposed helper utilities (`inequality_std`, `get_state_hs_earnings`, `SIM_DEFAULTS`) so later modules can stay lightweight.
 
 ## Phase 3 Progress
-- Added `data/commuting_zones.csv`, a synthetic crosswalk listing two commuting zones (urban + rural) for every state + DC.
-- Implemented `simulation/geo.py` which ingests the crosswalk, assigns local HS earnings based on state medians + inequality slider, and returns dataclass-backed `State`/`CommutingZone` objects for downstream program generation.
+- Added `data/state_cz_mapping.csv`, a proportional mapping of state → commuting-zone counts so large states get richer geographic coverage than small states.
+- `simulation/geo.py` now synthesizes the requested number of CZs per state (with type mix + local HS earnings) directly from that mapping and the inequality slider.
 
 ## Phase 4 Progress
 - Added `simulation/programs.py` with a `Program` dataclass and generator routine that creates synthetic two-year/four-year programs per CZ using the bump ranges defined in `config`.
@@ -31,7 +31,7 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 
 ## Phase 7 Progress
 - Replaced the placeholder `app.py` with a working Streamlit UI that wires together the state/CZ generator, program simulation, evaluation logic, and Plotly visuals. Sidebar controls expose state filter, horizon, inequality slider, programs-per-CZ, and random seed.
-- Cached heavy computations via `st.cache_data` to keep interactions fast; added a raw data preview to help validate results.
+- Cached heavy computations via `st.cache_data` to keep interactions fast; added a raw data preview to help validate results. When a single state is selected, the UI calls out how many CZs were synthesized based on the mapping.
 
 ## Phase 8 Progress
 - Added `watchdog` to enable Streamlit's file watcher and ran performance profiling (6,120 programs evaluated in ~11 ms, 8,160 programs in ~10.8 ms) showing well under the 1s requirement.

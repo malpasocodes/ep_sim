@@ -5,7 +5,7 @@
 - Documented current status and next steps for follow-on phases.
 - Initialized the project with `uv` and created a `.venv` for local development.
 - Added `simulation/config.py` capturing time horizons, program bump logic, inequality slider mapping, state-level HS benchmarks, and CZ/program defaults for upcoming phases.
-- Created `data/commuting_zones.csv` (urban + rural CZ entries per state/DC) and `simulation/geo.py` to generate state/commuting-zone objects with synthetic local HS earnings informed by inequality settings.
+- Added `data/state_cz_mapping.csv` to control how many commuting zones each state receives, updated `simulation/geo.py` to synthesize CZs/types/earnings from that mapping + inequality slider, and surfaced per-state CZ counts in the UI caption.
 - Phase 3 complete; next up is Phase 4 (program generator) to populate synthetic 2-yr/4-yr programs per CZ.
 - Added `simulation/programs.py` with program dataclasses, generation logic (using bump ranges + noise), and helper converters for DataFrame ingestion; Phase 4 kicked off.
 - Smoke-tested Phase 3–4 stack via `.venv/bin/python`: generated 204 programs across 51 states using default settings (confirmed env wiring after `uv pip install -r requirements.txt`).
