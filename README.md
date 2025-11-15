@@ -21,6 +21,10 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - Added `simulation/programs.py` with a `Program` dataclass and generator routine that creates synthetic two-year/four-year programs per CZ using the bump ranges defined in `config`.
 - Included helper utilities for downstream pandas integration (`programs_to_records`) so later phases can build evaluation DataFrames quickly.
 
+## Phase 5 Progress
+- Added `simulation/evaluation.py` with functions that compute state/local benchmark distances, pass/fail flags, and classification labels for each program based on a selected time horizon.
+- Included `summarize_classifications` helper to produce counts/shares for the bar chart planned in later UI phases.
+
 ## Development notes
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash
