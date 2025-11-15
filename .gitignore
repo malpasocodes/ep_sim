@@ -1,0 +1,16 @@
+# Python caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments (uv, venv, etc.)
+.venv/
+.uv/
+.env/
+
+# Streamlit specific
+.streamlit/
+
+# OS files
+.DS_Store
