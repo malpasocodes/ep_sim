@@ -53,10 +53,13 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
    - `simulation/`: configuration, synthetic data rules, evaluation logic (Phases 2–5)
    - `pages/`: Streamlit multipage entries (Phase 7)
    - `utils/`: shared helpers (logging, formatting, etc.)
-4. **Docs**: `PRD.md`, `ProjectPlan.md`, `Tech_Specs.md`, `UI_UX_Spec.md`, `Additional_Visualizations_Spec.md`, and `README_DEPLOY.md` live at the root for quick reference.
+4. **Docs**: `PRD.md`, `ProjectPlan.md`, `Tech_Specs.md`, `UI_UX_Spec.md`, `Additional_Visualizations_Spec.md`, `README_DEPLOY.md`, `Demo_Script.md`, and `docs/Interpretation_Guide.md` live at the root (or `/docs`) for quick reference.
 5. **Deployment**:
    - Render configuration lives in `render.yaml` (Phase 9)
    - Follow `README_DEPLOY.md` for build/start commands and environment variables.
+
+## License
+Released under the [MIT License](LICENSE). Code and documentation are intended for public use via the GitHub repository and Render deployment described above.
 
 Future phases will follow the project plan to flesh out the simulation engine, Plotly
 visuals, Streamlit layout, performance optimizations, and deployment to Render.
