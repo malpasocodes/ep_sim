@@ -1,44 +1,65 @@
 # Earnings Premium Simulation – Version 1
 
-This repository hosts the synthetic prototype described in the PRD. The application
-is a Streamlit app that simulates how pass/fail results change when comparing
-statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
+This repository hosts Version 1 of the **Earnings Premium Simulation Tool**, a Streamlit app that uses synthetic data to show how college program pass/fail outcomes change when federal accountability rules rely on:
 
-## Phase 1 Status
-- Repository initialized with placeholders for `simulation/`, `pages/`, and `utils/`.
-- `app.py` is a Streamlit stub; later phases will add real simulation logic and UI components.
-- Requirements file captures the baseline dependencies (Streamlit, Plotly, Pandas, NumPy).
+- a single **statewide high-school earnings benchmark**, versus  
+- **local (commuting-zone) earnings benchmarks** that better reflect actual labor markets.
 
-## Phase 2 Progress
-- Added `simulation/config.py` with centralized definitions for time horizons, program bump ranges, inequality slider behavior, state-level synthetic HS earnings, and commuting-zone assumptions.
-- Exposed helper utilities (`inequality_std`, `get_state_hs_earnings`, `SIM_DEFAULTS`) so later modules can stay lightweight.
+The goal is to make geographic bias in accountability metrics visible and intuitive for non-technical audiences.
 
-## Phase 3 Progress
-- Added `data/state_cz_mapping.csv`, a proportional mapping of state → commuting-zone counts so large states get richer geographic coverage than small states.
-- `simulation/geo.py` now synthesizes the requested number of CZs per state (with type mix + local HS earnings) directly from that mapping and the inequality slider.
+## What the App Shows
 
-## Phase 4 Progress
-- Added `simulation/programs.py` with a `Program` dataclass and generator routine that creates synthetic two-year/four-year programs per CZ using the bump ranges defined in `config`.
-- Included helper utilities for downstream pandas integration (`programs_to_records`) so later phases can build evaluation DataFrames quickly.
+- **State & simulation overview**
+  - State-specific commuting-zone (CZ) counts based on a proportional mapping (`data/state_cz_mapping.csv`).
+  - Programs per CZ and total simulated program count.
+  - Within-state inequality setting (low/medium/high).
 
-## Phase 5 Progress
-- Added `simulation/evaluation.py` with functions that compute state/local benchmark distances, pass/fail flags, and classification labels for each program based on a selected time horizon.
-- Included `summarize_classifications` helper to produce counts/shares for the bar chart planned in later UI phases.
+- **Local vs statewide earnings distribution**
+  - Histogram of **local HS earnings** across CZs in the selected state.
+  - Dashed vertical line for the **statewide HS median**.
+  - Shows how many local labor markets sit below the statewide benchmark.
 
-## Phase 6 Progress
-- Added `simulation/visuals.py` (Plotly helpers) to render the distance scatterplot, classification bar chart, and a short narrative summary using the evaluation outputs.
-- Confirmed the visuals create Plotly `Figure` objects via a quick end-to-end smoke test (states → programs → eval → charts).
+- **Benchmark sensitivity**
+  - Scatterplot of `distance_local` vs `distance_state` for each program.
+  - Programs classified into four groups:
+    - Pass Both
+    - Fail Both
+    - Pass State Only
+    - Pass Local Only (often the largest misclassified group).
+  - Bar chart summarizing the share in each category.
 
-## Phase 7 Progress
-- Replaced the placeholder `app.py` with a working Streamlit UI that wires together the state/CZ generator, program simulation, evaluation logic, and Plotly visuals. Sidebar controls expose state filter, horizon, inequality slider, programs-per-CZ, and random seed.
-- Cached heavy computations via `st.cache_data` to keep interactions fast; added a raw data preview to help validate results. When a single state is selected, the UI calls out how many CZs were synthesized based on the mapping.
-- Implemented the interpretability suite from `Additional_Visualizations_Spec.md`: a summary card, CZ earnings histogram with statewide benchmark, enriched narrative, and example program trajectories that highlight early vs later horizons.
+- **Time horizon comparison**
+  - Example program trajectories comparing **early** (3–4 year) vs **later** (10-year) earnings.
+  - Overlaid benchmark line to show how “borderline” programs early on can move further above the benchmark over time.
 
-## Phase 8 Progress
-- Added `watchdog` to enable Streamlit's file watcher and ran performance profiling (6,120 programs evaluated in ~11 ms, 8,160 programs in ~10.8 ms) showing well under the 1s requirement.
-- Documented profiling approach and noted that no further optimizations were required thanks to vectorized pandas operations.
+## How It Works (Under the Hood)
 
-## Development notes
+- **Synthetic inputs**
+  - State-level HS earnings medians (`simulation/config.py`).
+  - State → CZ count mapping (`data/state_cz_mapping.csv`).
+  - Within-state inequality parameter that widens/narrows local earnings around the state median.
+
+- **Geography & programs**
+  - `simulation/geo.py` synthesizes CZ objects per state with:
+    - IDs, human-readable names, CZ types (urban/suburban/rural),
+    - local HS earnings drawn from state medians + inequality settings.
+  - `simulation/programs.py` generates 2‑year and 4‑year programs per CZ with early/later earnings bumps and noise.
+
+- **Evaluation & visuals**
+  - `simulation/evaluation.py` computes:
+    - earnings relative to statewide and local benchmarks,
+    - pass/fail flags and distances,
+    - four-category classification.
+  - `simulation/visuals.py` builds:
+    - scatter + bar charts,
+    - local-vs-state earnings histogram,
+    - sample program trajectories,
+    - narrative text tying the visuals together.
+
+Everything runs in memory via Pandas/NumPy and updates reactively when sidebar controls change.
+
+## Getting Started (Local Development)
+
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash
    uv venv
@@ -54,12 +75,39 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
    - `pages/`: Streamlit multipage entries (Phase 7)
    - `utils/`: shared helpers (logging, formatting, etc.)
 4. **Docs**: `PRD.md`, `ProjectPlan.md`, `Tech_Specs.md`, `UI_UX_Spec.md`, `Additional_Visualizations_Spec.md`, `README_DEPLOY.md`, `Demo_Script.md`, and `docs/Interpretation_Guide.md` live at the root (or `/docs`) for quick reference.
-5. **Deployment**:
-   - Render configuration lives in `render.yaml` (Phase 9)
-   - Follow `README_DEPLOY.md` for build/start commands and environment variables.
+
+## Deployment (Render)
+
+The app is designed to run as a Render web service:
+
+- Configuration lives in `render.yaml`.
+- Typical settings:
+  - **Build command:** `pip install -r requirements.txt`
+  - **Start command:** `streamlit run app.py --server.port $PORT --server.address 0.0.0.0`
+  - **Env vars:** `PYTHON_VERSION=3.12.0`, optional `STREAMLIT_BROWSER_GAP=0`
+- See `README_DEPLOY.md` for step‑by‑step instructions.
+
+## Project Documentation & Design
+
+- **Product & design**
+  - `PRD.md` – Product Requirements (problem, goals, users).
+  - `UI_UX_Spec.md` – UI layout and interaction model.
+  - `Additional_Visualizations_Spec.md` – interpretability visualizations.
+  - `docs/Interpretation_Guide.md` – “how to read” the app for non-technical audiences.
+
+- **Technical**
+  - `Tech_Specs.md` – architecture, data model, performance targets.
+  - `ProjectPlan.md` – multi-phase implementation plan.
+  - `Demo_Script.md` – suggested 5‑minute live demo script.
+
+## Development History
+
+The repository was built in ten phases (setup, config, CZ scaffolding, programs, evaluation, visuals, Streamlit UI, performance profiling, Render deployment, documentation + licensing). For more detail, see `ProjectPlan.md` and `dev_log.md`.
 
 ## License
+
 Released under the [MIT License](LICENSE). Code and documentation are intended for public use via the GitHub repository and Render deployment described above.
 
-Future phases will follow the project plan to flesh out the simulation engine, Plotly
-visuals, Streamlit layout, performance optimizations, and deployment to Render.
+---
+
+Future versions will integrate real data (ACS, IPEDS, College Scorecard) and add richer filters (sector, demographics, MSI status) while preserving the interpretability focus of this prototype.
