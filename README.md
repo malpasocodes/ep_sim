@@ -32,6 +32,7 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 ## Phase 7 Progress
 - Replaced the placeholder `app.py` with a working Streamlit UI that wires together the state/CZ generator, program simulation, evaluation logic, and Plotly visuals. Sidebar controls expose state filter, horizon, inequality slider, programs-per-CZ, and random seed.
 - Cached heavy computations via `st.cache_data` to keep interactions fast; added a raw data preview to help validate results. When a single state is selected, the UI calls out how many CZs were synthesized based on the mapping.
+- Implemented the interpretability suite from `Additional_Visualizations_Spec.md`: a summary card, CZ earnings histogram with statewide benchmark, enriched narrative, and example program trajectories that highlight early vs later horizons.
 
 ## Phase 8 Progress
 - Added `watchdog` to enable Streamlit's file watcher and ran performance profiling (6,120 programs evaluated in ~11 ms, 8,160 programs in ~10.8 ms) showing well under the 1s requirement.
@@ -52,7 +53,7 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
    - `simulation/`: configuration, synthetic data rules, evaluation logic (Phases 2–5)
    - `pages/`: Streamlit multipage entries (Phase 7)
    - `utils/`: shared helpers (logging, formatting, etc.)
-4. **Docs**: `PRD.md`, `ProjectPlan.md`, `Tech_Specs.md`, and `UI_UX_Spec.md` live at the root for quick reference.
+4. **Docs**: `PRD.md`, `ProjectPlan.md`, `Tech_Specs.md`, `UI_UX_Spec.md`, and `Additional_Visualizations_Spec.md` live at the root for quick reference.
 
 Future phases will follow the project plan to flesh out the simulation engine, Plotly
 visuals, Streamlit layout, performance optimizations, and deployment to Render.

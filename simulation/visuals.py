@@ -72,22 +72,109 @@ def classification_bar(summary_df: pd.DataFrame) -> go.Figure:
     return fig
 
 
-def generate_narrative(summary_df: pd.DataFrame) -> str:
-    """Produce a simple narrative sentence about classification shares."""
+def local_earnings_distribution(
+    cz_df: pd.DataFrame,
+    *,
+    state_label: str,
+    state_benchmark: float,
+) -> go.Figure:
+    """Histogram showing distribution of local HS earnings with statewide median line."""
+
+    fig = px.histogram(
+        cz_df,
+        x="local_hs_earnings",
+        nbins=20,
+        labels={"local_hs_earnings": "Local HS earnings ($)"},
+        title=f"Distribution of Local High-School Earnings – {state_label}",
+    )
+    fig.add_vline(
+        x=state_benchmark,
+        line_dash="dash",
+        line_color="#333333",
+        annotation_text="Statewide benchmark",
+        annotation_position="top right",
+    )
+    fig.update_layout(template="plotly_white")
+    return fig
+
+
+def sample_program_earnings_chart(
+    sample_df: pd.DataFrame,
+    *,
+    state_benchmark: float | None = None,
+) -> go.Figure:
+    """Grouped bar chart comparing early vs late earnings for sample programs."""
+
+    melted = sample_df.melt(
+        id_vars=["program_id"],
+        value_vars=["early_earnings", "late_earnings"],
+        var_name="horizon",
+        value_name="earnings",
+    )
+    horizon_labels = {
+        "early_earnings": "Early (3–4 yrs)",
+        "late_earnings": "Later (10 yrs)",
+    }
+    melted["horizon"] = melted["horizon"].map(horizon_labels)
+
+    fig = px.bar(
+        melted,
+        x="program_id",
+        y="earnings",
+        color="horizon",
+        barmode="group",
+        labels={"program_id": "Program", "earnings": "Earnings ($)", "horizon": "Time Horizon"},
+        title="Sample Program Trajectories",
+    )
+    if state_benchmark:
+        fig.add_hline(
+            y=state_benchmark,
+            line_dash="dash",
+            line_color="#333333",
+            annotation_text="Statewide benchmark",
+            annotation_position="top left",
+        )
+    fig.update_layout(template="plotly_white")
+    return fig
+
+
+def generate_narrative(
+    summary_df: pd.DataFrame,
+    *,
+    state_label: str,
+    cz_count: int,
+    cz_min: float,
+    cz_max: float,
+    state_benchmark: float | None,
+    horizon_label: str,
+    inequality_label: str,
+) -> str:
+    """Produce narrative text linking the visuals together."""
 
     total = summary_df["count"].sum()
     if total == 0:
         return "No programs generated for the selected inputs."
 
     top = summary_df.sort_values("share", ascending=False).iloc[0]
-    category = top["classification"]
     share = f"{top['share']:.0%}"
-    return f"{share} of simulated programs fall into the “{category}” bucket under the current settings."
+    base = (
+        f"{state_label} currently includes {cz_count} synthetic commuting zones with local high-school earnings "
+        f"spanning ${cz_min:,.0f} to ${cz_max:,.0f}"
+    )
+    if state_benchmark:
+        base += f" around a statewide benchmark of ${state_benchmark:,.0f}"
+    base += (
+        f'. Under the {horizon_label.lower()} horizon ({inequality_label} inequality), {share} of simulated programs fall into '
+        f'the “{top["classification"]}” group.'
+    )
+    return base
 
 
 __all__ = [
     "scatter_distance_plot",
     "classification_bar",
+    "local_earnings_distribution",
+    "sample_program_earnings_chart",
     "generate_narrative",
     "CLASSIFICATION_COLORS",
 ]
