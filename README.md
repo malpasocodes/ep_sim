@@ -9,6 +9,14 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - `app.py` is a Streamlit stub; later phases will add real simulation logic and UI components.
 - Requirements file captures the baseline dependencies (Streamlit, Plotly, Pandas, NumPy).
 
+## Phase 2 Progress
+- Added `simulation/config.py` with centralized definitions for time horizons, program bump ranges, inequality slider behavior, state-level synthetic HS earnings, and commuting-zone assumptions.
+- Exposed helper utilities (`inequality_std`, `get_state_hs_earnings`, `SIM_DEFAULTS`) so later modules can stay lightweight.
+
+## Phase 3 Progress
+- Added `data/commuting_zones.csv`, a synthetic crosswalk listing two commuting zones (urban + rural) for every state + DC.
+- Implemented `simulation/geo.py` which ingests the crosswalk, assigns local HS earnings based on state medians + inequality slider, and returns dataclass-backed `State`/`CommutingZone` objects for downstream program generation.
+
 ## Development notes
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash

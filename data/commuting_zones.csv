@@ -1,0 +1,103 @@
+state_code,state_name,cz_id,cz_name,cz_type
+AL,Alabama,AL-U,Alabama Metro,urban
+AL,Alabama,AL-R,Alabama Rural,rural
+AK,Alaska,AK-U,Alaska Metro,urban
+AK,Alaska,AK-R,Alaska Rural,rural
+AZ,Arizona,AZ-U,Arizona Metro,urban
+AZ,Arizona,AZ-R,Arizona Rural,rural
+AR,Arkansas,AR-U,Arkansas Metro,urban
+AR,Arkansas,AR-R,Arkansas Rural,rural
+CA,California,CA-U,California Metro,urban
+CA,California,CA-R,California Rural,rural
+CO,Colorado,CO-U,Colorado Metro,urban
+CO,Colorado,CO-R,Colorado Rural,rural
+CT,Connecticut,CT-U,Connecticut Metro,urban
+CT,Connecticut,CT-R,Connecticut Rural,rural
+DE,Delaware,DE-U,Delaware Metro,urban
+DE,Delaware,DE-R,Delaware Rural,rural
+DC,District of Columbia,DC-U,District of Columbia Metro,urban
+DC,District of Columbia,DC-R,District of Columbia Rural,rural
+FL,Florida,FL-U,Florida Metro,urban
+FL,Florida,FL-R,Florida Rural,rural
+GA,Georgia,GA-U,Georgia Metro,urban
+GA,Georgia,GA-R,Georgia Rural,rural
+HI,Hawaii,HI-U,Hawaii Metro,urban
+HI,Hawaii,HI-R,Hawaii Rural,rural
+ID,Idaho,ID-U,Idaho Metro,urban
+ID,Idaho,ID-R,Idaho Rural,rural
+IL,Illinois,IL-U,Illinois Metro,urban
+IL,Illinois,IL-R,Illinois Rural,rural
+IN,Indiana,IN-U,Indiana Metro,urban
+IN,Indiana,IN-R,Indiana Rural,rural
+IA,Iowa,IA-U,Iowa Metro,urban
+IA,Iowa,IA-R,Iowa Rural,rural
+KS,Kansas,KS-U,Kansas Metro,urban
+KS,Kansas,KS-R,Kansas Rural,rural
+KY,Kentucky,KY-U,Kentucky Metro,urban
+KY,Kentucky,KY-R,Kentucky Rural,rural
+LA,Louisiana,LA-U,Louisiana Metro,urban
+LA,Louisiana,LA-R,Louisiana Rural,rural
+ME,Maine,ME-U,Maine Metro,urban
+ME,Maine,ME-R,Maine Rural,rural
+MD,Maryland,MD-U,Maryland Metro,urban
+MD,Maryland,MD-R,Maryland Rural,rural
+MA,Massachusetts,MA-U,Massachusetts Metro,urban
+MA,Massachusetts,MA-R,Massachusetts Rural,rural
+MI,Michigan,MI-U,Michigan Metro,urban
+MI,Michigan,MI-R,Michigan Rural,rural
+MN,Minnesota,MN-U,Minnesota Metro,urban
+MN,Minnesota,MN-R,Minnesota Rural,rural
+MS,Mississippi,MS-U,Mississippi Metro,urban
+MS,Mississippi,MS-R,Mississippi Rural,rural
+MO,Missouri,MO-U,Missouri Metro,urban
+MO,Missouri,MO-R,Missouri Rural,rural
+MT,Montana,MT-U,Montana Metro,urban
+MT,Montana,MT-R,Montana Rural,rural
+NE,Nebraska,NE-U,Nebraska Metro,urban
+NE,Nebraska,NE-R,Nebraska Rural,rural
+NV,Nevada,NV-U,Nevada Metro,urban
+NV,Nevada,NV-R,Nevada Rural,rural
+NH,New Hampshire,NH-U,New Hampshire Metro,urban
+NH,New Hampshire,NH-R,New Hampshire Rural,rural
+NJ,New Jersey,NJ-U,New Jersey Metro,urban
+NJ,New Jersey,NJ-R,New Jersey Rural,rural
+NM,New Mexico,NM-U,New Mexico Metro,urban
+NM,New Mexico,NM-R,New Mexico Rural,rural
+NY,New York,NY-U,New York Metro,urban
+NY,New York,NY-R,New York Rural,rural
+NC,North Carolina,NC-U,North Carolina Metro,urban
+NC,North Carolina,NC-R,North Carolina Rural,rural
+ND,North Dakota,ND-U,North Dakota Metro,urban
+ND,North Dakota,ND-R,North Dakota Rural,rural
+OH,Ohio,OH-U,Ohio Metro,urban
+OH,Ohio,OH-R,Ohio Rural,rural
+OK,Oklahoma,OK-U,Oklahoma Metro,urban
+OK,Oklahoma,OK-R,Oklahoma Rural,rural
+OR,Oregon,OR-U,Oregon Metro,urban
+OR,Oregon,OR-R,Oregon Rural,rural
+PA,Pennsylvania,PA-U,Pennsylvania Metro,urban
+PA,Pennsylvania,PA-R,Pennsylvania Rural,rural
+RI,Rhode Island,RI-U,Rhode Island Metro,urban
+RI,Rhode Island,RI-R,Rhode Island Rural,rural
+SC,South Carolina,SC-U,South Carolina Metro,urban
+SC,South Carolina,SC-R,South Carolina Rural,rural
+SD,South Dakota,SD-U,South Dakota Metro,urban
+SD,South Dakota,SD-R,South Dakota Rural,rural
+TN,Tennessee,TN-U,Tennessee Metro,urban
+TN,Tennessee,TN-R,Tennessee Rural,rural
+TX,Texas,TX-U,Texas Metro,urban
+TX,Texas,TX-R,Texas Rural,rural
+UT,Utah,UT-U,Utah Metro,urban
+UT,Utah,UT-R,Utah Rural,rural
+VT,Vermont,VT-U,Vermont Metro,urban
+VT,Vermont,VT-R,Vermont Rural,rural
+VA,Virginia,VA-U,Virginia Metro,urban
+VA,Virginia,VA-R,Virginia Rural,rural
+WA,Washington,WA-U,Washington Metro,urban
+WA,Washington,WA-R,Washington Rural,rural
+WV,West Virginia,WV-U,West Virginia Metro,urban
+WV,West Virginia,WV-R,West Virginia Rural,rural
+WI,Wisconsin,WI-U,Wisconsin Metro,urban
+WI,Wisconsin,WI-R,Wisconsin Rural,rural
+WY,Wyoming,WY-U,Wyoming Metro,urban
+WY,Wyoming,WY-R,Wyoming Rural,rural
