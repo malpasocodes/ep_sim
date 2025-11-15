@@ -11,3 +11,4 @@
 - Smoke-tested Phase 3–4 stack via `.venv/bin/python`: generated 204 programs across 51 states using default settings (confirmed env wiring after `uv pip install -r requirements.txt`).
 - Built Phase 5 evaluation module (`simulation/evaluation.py`) to compute benchmark distances, pass/fail flags, classification labels, and summary counts; verified via quick pandas test script.
 - Ready for Phase 6 (visualization layer) now that evaluation outputs are DataFrame-friendly.
+- Added `simulation/visuals.py` (scatter, bar, narrative builders) and confirmed end-to-end run from geo → programs → evaluation → Plotly figures works via `.venv/bin/python`.

@@ -25,6 +25,10 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - Added `simulation/evaluation.py` with functions that compute state/local benchmark distances, pass/fail flags, and classification labels for each program based on a selected time horizon.
 - Included `summarize_classifications` helper to produce counts/shares for the bar chart planned in later UI phases.
 
+## Phase 6 Progress
+- Added `simulation/visuals.py` (Plotly helpers) to render the distance scatterplot, classification bar chart, and a short narrative summary using the evaluation outputs.
+- Confirmed the visuals create Plotly `Figure` objects via a quick end-to-end smoke test (states → programs → eval → charts).
+
 ## Development notes
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash
