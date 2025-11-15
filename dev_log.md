@@ -12,3 +12,5 @@
 - Built Phase 5 evaluation module (`simulation/evaluation.py`) to compute benchmark distances, pass/fail flags, classification labels, and summary counts; verified via quick pandas test script.
 - Ready for Phase 6 (visualization layer) now that evaluation outputs are DataFrame-friendly.
 - Added `simulation/visuals.py` (scatter, bar, narrative builders) and confirmed end-to-end run from geo → programs → evaluation → Plotly figures works via `.venv/bin/python`.
+- Phase 7: replaced placeholder `app.py` with the full Streamlit experience (sidebar controls + cached simulation pipeline + Plotly charts + data preview); smoke-tested locally.
+- Phase 8: installed `watchdog` to improve Streamlit reload performance, profiled evaluation path (6k–8k programs evaluated in ~10–11 ms), and confirmed we already meet the <1s responsiveness goal without further tuning.

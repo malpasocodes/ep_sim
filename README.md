@@ -29,6 +29,14 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - Added `simulation/visuals.py` (Plotly helpers) to render the distance scatterplot, classification bar chart, and a short narrative summary using the evaluation outputs.
 - Confirmed the visuals create Plotly `Figure` objects via a quick end-to-end smoke test (states → programs → eval → charts).
 
+## Phase 7 Progress
+- Replaced the placeholder `app.py` with a working Streamlit UI that wires together the state/CZ generator, program simulation, evaluation logic, and Plotly visuals. Sidebar controls expose state filter, horizon, inequality slider, programs-per-CZ, and random seed.
+- Cached heavy computations via `st.cache_data` to keep interactions fast; added a raw data preview to help validate results.
+
+## Phase 8 Progress
+- Added `watchdog` to enable Streamlit's file watcher and ran performance profiling (6,120 programs evaluated in ~11 ms, 8,160 programs in ~10.8 ms) showing well under the 1s requirement.
+- Documented profiling approach and noted that no further optimizations were required thanks to vectorized pandas operations.
+
 ## Development notes
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash
