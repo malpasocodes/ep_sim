@@ -17,6 +17,10 @@ statewide high-school earnings benchmarks to local (commuting-zone) benchmarks.
 - Added `data/commuting_zones.csv`, a synthetic crosswalk listing two commuting zones (urban + rural) for every state + DC.
 - Implemented `simulation/geo.py` which ingests the crosswalk, assigns local HS earnings based on state medians + inequality slider, and returns dataclass-backed `State`/`CommutingZone` objects for downstream program generation.
 
+## Phase 4 Progress
+- Added `simulation/programs.py` with a `Program` dataclass and generator routine that creates synthetic two-year/four-year programs per CZ using the bump ranges defined in `config`.
+- Included helper utilities for downstream pandas integration (`programs_to_records`) so later phases can build evaluation DataFrames quickly.
+
 ## Development notes
 1. **Environment management**: use [`uv`](https://github.com/astral-sh/uv) for creating the virtual environment and installing dependencies:
    ```bash
